@@ -1,0 +1,20 @@
+[flake8]
+extend-ignore=
+    E501
+    W293
+    W291
+    
+exclude=
+    .git,
+    .ipynb_checkpoints,
+    .vscode,
+    bin,
+    *.egg-info,
+    etc,
+    jupyter,
+    lib,
+    share,
+    .Python,
+    pyvenv.cfg,
+    
+docstring-convention=google
