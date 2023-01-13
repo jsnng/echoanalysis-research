@@ -1,0 +1,13 @@
+# venv
+bin/
+etc/
+lib/
+share/
+.Python
+pyvenv.cfg
+# macOS
+.DS_Store
+._*
+# vi
+*.sw[o|p]
+*~
