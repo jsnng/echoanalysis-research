@@ -1,13 +1,26 @@
-# venv
+*.swp
+*.swo
+
+.DS_Store
+._*
+
+__pycache__/
+
+EchoNet-Dynamic/
+EchoNet-Dynamic.zip
+best.pt
+*.avi
+
 bin/
-etc/
+include/
 lib/
 share/
 .Python
+*.npy
+
+.ipynb_checkpoints/
+
+workflow.egg-info/
+build/
+
 pyvenv.cfg
-# macOS
-.DS_Store
-._*
-# vi
-*.sw[o|p]
-*~
