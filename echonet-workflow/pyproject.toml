@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "workflow"
-version = "0.0.1"
 requires-python = ">=3.9.6"
 dependencies = [
 	"opencv-python",
@@ -14,6 +13,20 @@ dependencies = [
 	"scipy",
 	"scikit-image",
 ]
+dynamic = [
+	"version"
+]
+
+[project.optional-dependencies]
+develop = [
+	'ipykernel',
+	'matplotlib'
+]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = [
+	"src"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "workflow.__version__"}
