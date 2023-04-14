@@ -8,7 +8,7 @@ from tqdm import tqdm, trange
 
 import math
 
-def run():
+def run(bestpt, dataset):
     model = torchvision.models.segmentation.deeplabv3_resnet50(weights=None)
     model.classifer[-1] = torch.nn.Conv2d(256, 1, (1, 1))
     
@@ -23,7 +23,7 @@ def run():
     if torch.backends.mps.is_available():
         device = 'mps'
     
-    ckpt = torch.load('best.pt', map_location={'cuda:0': device})
+    ckpt = torch.load(bestpt, map_location={'cuda:0': device})
     model.to(device)
 
     ckpt['state_dict'] = dict(zip(model.state_dict(), list(ckpt['state_dict'].values())))
@@ -70,7 +70,7 @@ def run():
                 echocardiogram *= 255
                 echocardiogram = segmentation.astype(np.uint8)
 
-                # np.save('', np.array([
+                # np.save('', np.array([    
                 #     ('echocardiogram', np.uint8, echocardiogram)
                 #     ('prediction', np.bool, prediction),
                 #     ('segmentation', np.uint8, segmentation)
@@ -81,5 +81,4 @@ def run():
                 #     (vw.write(x) for x in segmentation)
                 # vw.release()
 
-if __name__ == '__main__':
-    run()
+                return echocardiogram
