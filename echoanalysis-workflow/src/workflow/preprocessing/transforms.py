@@ -8,6 +8,7 @@ import cv2
 
 from .utils import grayscale
 
+
 __all__ = [   
     'fx',
     'compose',
@@ -16,7 +17,7 @@ __all__ = [
     'scrub',
     'averaging',
     'resize',
-    'filter',
+    'wtfilter',
     'stack'
 ]
 
@@ -35,11 +36,11 @@ class fx(abc.ABC):
         pass
     
     @abc.abstractmethod
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         raise NotImplementedError
     
     def __call__(self, X: np.ndarray) -> np.ndarray:
-        result = self.__transform(X)
+        result = self.transform(X)
         if not isinstance(result, np.ndarray):
             result = np.asarray(result)
         if np.issubdtype(result.dtype, np.floating):
@@ -66,7 +67,7 @@ class compose(fx):
         self.fx = fx
         self.verbose = verbose
         
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         for func in self.fx:
             X = func(X)
             if self.verbose:
@@ -97,7 +98,7 @@ class segmentation(fx):
         self.mask = mask
     
     @_fx_transform_X_args_fix
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         fc, y, x, c = X.shape
         return X * np.broadcast_to(self.mask, (fc, c, y, x)).transpose(0, 2, 3, 1)
 
@@ -126,7 +127,7 @@ class square(fx):
         self.y2 = y2
         self.x2 = x2
 
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         x_dist = self.x2 - self.x1
         y_dist = self.y2 - self.y1
 
@@ -158,7 +159,7 @@ class scrub(fx):
         X with strictly increasing (i.e., r > g > b) channels replaced with 0
     """
     @_fx_transform_X_args_fix
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         fc, y, x, c = X.shape
         brown = ((X[..., 0] > X[..., 1]) & (X[..., 1] > X[..., 2])) == 0
         return X * np.broadcast_to(brown, (c, fc, y, x)).transpose(1, 2, 3, 0)
@@ -174,7 +175,7 @@ class averaging(fx):
     Returns:
        (replace with description)
     """
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         return np.asarray([np.sum(X[i:i+3], axis=0)/3 for i in range(len(X))])
     
 
@@ -209,7 +210,7 @@ class resize(fx):
         self.y = y
         self.interpolation = interpolation
 
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         # lets not reinvent to wheel-
         if np.issubdtype(X.dtype,  np.floating) and np.max(X) <= 1.0: 
             X *= 255
@@ -217,7 +218,7 @@ class resize(fx):
         return np.asarray([cv2.resize(i, (self.x, self.y), self.interpolation) for i in X])
     
 
-class filter(fx):
+class wtfilter(fx):
     """
     performs a first order wavelet decomposition with thresholding
 
@@ -228,7 +229,7 @@ class filter(fx):
        X after wavelet decomposition. A normalisation is performed so 
        the range of X will be [0.0, 1.0].
     """
-    def _transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         import pywt
         # i.e., low pass filter
 
@@ -265,7 +266,7 @@ class stack(fx):
     >>> X.shape
     (633, 720, 540, 3)
     """
-    def __transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         if X.ndim > 3:
             raise ValueError(f"{X.ndim=} > 3")
         return np.asarray(3*[X]).transpose(1, 2, 3, 0)

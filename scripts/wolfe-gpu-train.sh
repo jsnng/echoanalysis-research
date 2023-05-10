@@ -14,8 +14,7 @@ if [ ! -d dynamic ] && git clone https://github.com/echonet/dynamic.git
 cd dynamic
 pip install --user -e .
 
-cp ../EchoNet-Dynamic.zip
-unzip EchoNet-Dynamic.zip
+cp ../EchoNet-Dynamic.zip && unzip EchoNet-Dynamic.zip
 echo 'DATA_DIR = EchoNet-Dynamic/' > echonet.cfg
 
 echonet segmentation --save_video

@@ -6,12 +6,14 @@ __all__ = ['ToTensor']
 class ToTensor:
     """
     re-implementation of torchvision.transforms.ToTensor() for ndarrays with 4 dimensions.
+
     converts:
         numpy.ndarray with 4 dimensions of shape [fc, h, w, c] to
         torch.floatTensor of shape (fc x c x h x w) in the range [0, 1].
     """
     def __call__(self, ndarray):
         """
+        
         Args:
             ndarray (numpy.ndarray): float ndarray to be converted to tensor.
 

@@ -1,3 +1,4 @@
+""""""
 import os
 
 import torch
@@ -12,8 +13,7 @@ __all__ = ['run']
 
 
 def run(bestpt: os.PathLike, dataset: torchvision.datasets.VisionDataset) -> None:
-    """
-    runs echonet; a deeplabv3_resnet50 model on the provided torchvision.datasets.VisionDataset.
+    """runs echonet; a deeplabv3_resnet50 model on the provided torchvision.datasets.VisionDataset.
 
     Arguments:
         bestpt (os.PathLike): abspath of a saved deeplabv3_resnet50 torch object

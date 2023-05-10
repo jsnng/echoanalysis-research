@@ -14,6 +14,7 @@ from .transforms import (
     averaging,
     resize,
     stack,
+    wtfilter
 )
 
 
@@ -65,11 +66,11 @@ def run(item: os.PathLike, verbose=False) -> None:
         return compose([
             segmentation(mask),
             square(y1, x1, y2, x2),
-            scrub,
-            averaging,
-            filter,
+            scrub(),
+            averaging(),
+            wtfilter(),
             resize(112, 112),
-            stack
+            stack()
         ], verbose)(x)
 
     after = transformer(data)
@@ -83,7 +84,7 @@ def run(item: os.PathLike, verbose=False) -> None:
         return compose([
             square(y1, x1, y2, x2),
             resize(112, 112)
-        ])(x)
+        ], verbose)(x)
 
     # workaround to use preprocessing transformations
     mask = transformer(np.expand_dims(mask, axis=0))
