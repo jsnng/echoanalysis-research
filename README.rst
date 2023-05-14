@@ -13,6 +13,11 @@ Installation
 
 Usage
 -----
+
+:code:`run.py` contains an example on usage. Unprocessed videos are placed in a child directory :code:`Videos`.
+After running :code:`run.py`, processed videos are in :code:`.npz` uncompressed archives. Segmentation 
+predictions are in saved :code:`.npy` arrays. These files are saved in the current working directory
+
 .. code-block:: bash
 
     python3 run.py
