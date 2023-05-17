@@ -13,13 +13,6 @@ __all__ = ['run']
 
 
 def run(bestpt: os.PathLike, dataset: torchvision.datasets.VisionDataset) -> None:
-    """runs echonet; a deeplabv3_resnet50 model on the provided torchvision.datasets.VisionDataset.
-
-    Arguments:
-        bestpt (os.PathLike): abspath of a saved deeplabv3_resnet50 torch object
-        dataset (torchvision.data.Dataset class): a dataset class inheriting torchvision.data.Dataset to evaluate echonet
-    
-    """
     model = torchvision.models.segmentation.deeplabv3_resnet50(weights=None)
     
     # if torch.__version__ < 2.0.0:

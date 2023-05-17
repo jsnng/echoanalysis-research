@@ -50,11 +50,11 @@ def generate(bgr: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     lower = normalisation(np.sum(lower, axis=0)) > 0.1
     lower = erosion(lower)
 
-    # if __debug__:
-    #     import matplotlib.pyplot as plt
-    #     plt.figure()
-    #     plt.imshow(bgr[0, bgr.shape[2]//2:])
-    #     plt.imshow(lower, alpha=0.3)
+    if __debug__:
+        import matplotlib.pyplot as plt
+        plt.figure()
+        plt.imshow(bgr[0, bgr.shape[2]//2:])
+        plt.imshow(lower, alpha=0.3)
 
     upper = bgr[..., 0] & bgr[..., 1] & bgr[..., 2]
     upper = remove_small_objects(normalisation(np.sum(upper[:, :upper.shape[2]//2], axis=0)) > 0, 10000)
